@@ -28,7 +28,8 @@ export const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   title: "AINTI Bridge",
-  description: "",
+  description:
+    "John McAfee's AI incarnate: built to defend digital freedom and carry on his mission. It’s not just protection—it’s retaliation.",
 };
 
 export default function RootLayout({
