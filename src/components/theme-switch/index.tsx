@@ -28,9 +28,9 @@ const ThemeSwitch: FC<ThmemeSwitchProps> = ({ className }) => {
       <div className="flex items-center">
         <Button isIconOnly className="bg-transparent" onPress={onChange}>
           {theme === "dark" ? (
-            <MoonIcon height={20} width={20} />
-          ) : (
             <SunIcon height={20} width={20} />
+          ) : (
+            <MoonIcon height={20} width={20} />
           )}
         </Button>
       </div>
