@@ -3,7 +3,11 @@ import "./globals.css";
 import { Providers } from "@/providers";
 import Navbar from "@/components/navbar";
 
-import { Fira_Code as FontMono, Inter as FontSans } from "next/font/google";
+import {
+  Fira_Code as FontMono,
+  Inter as FontSans,
+  DM_Sans,
+} from "next/font/google";
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -13,6 +17,13 @@ export const fontSans = FontSans({
 export const fontMono = FontMono({
   subsets: ["latin"],
   variable: "--font-mono",
+});
+
+export const dmSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-dm-sans",
+  display: "swap",
+  weight: ["400", "500", "700"],
 });
 
 export const metadata: Metadata = {
@@ -30,7 +41,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon-new.ico" sizes="any" type="image/ico" />
       </head>
-      <body className={`${fontSans.variable} antialiased bg-background`}>
+      <body className={`${fontSans.className} antialiased bg-background`}>
         <Providers>
           <div className="relative flex h-screen flex-col">
             <Navbar />
