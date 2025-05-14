@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   CardBody,
+  CardHeader,
   Input,
   Select,
   SelectItem,
@@ -17,12 +18,11 @@ export default function Home() {
   return (
     <section className="flex w-full flex-col items-center justify-center gap-4 py-8 md:py-10">
       <div className="flex flex-col w-full max-w-lg justify-center text-center gap-4">
-        <div className="flex gap-4">
-          <Button color="primary">Connect to MetaMask</Button>
-          <Button color="primary">Connect to Phantom</Button>
-        </div>
-        <Card className="flex w-full">
-          <CardBody className="h-full">
+        <Card className="flex w-full px-2 py-4">
+          <CardHeader className="flex items-center justify-center">
+            <h1 className="text-xl">Aintivirus Bridge</h1>
+          </CardHeader>
+          <CardBody className="h-full ">
             <div className="flex flex-col gap-4">
               <Select label="From">
                 <SelectItem>Ethereum</SelectItem>
@@ -42,12 +42,20 @@ export default function Home() {
                 thousandSeparator
                 decimalScale={6}
               />
+              <div className="flex gap-4">
+                <Button color="primary" className="w-full">
+                  Connect to MetaMask
+                </Button>
+                <Button color="primary" className="w-full">
+                  Connect to Phantom
+                </Button>
+              </div>
+              <Button fullWidth color="primary">
+                Connect Wallet
+              </Button>
             </div>
           </CardBody>
         </Card>
-        <Button fullWidth color="primary">
-          Connect Wallet
-        </Button>
       </div>
     </section>
   );
