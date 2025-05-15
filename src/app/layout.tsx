@@ -3,27 +3,11 @@ import "./globals.css";
 import { Providers } from "@/providers";
 import Navbar from "@/components/navbar";
 
-import {
-  Fira_Code as FontMono,
-  Inter as FontSans,
-  DM_Sans,
-} from "next/font/google";
+import { Inter } from "next/font/google";
 
-export const fontSans = FontSans({
+const fontSans = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
-});
-
-export const fontMono = FontMono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-});
-
-export const dmSans = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-dm-sans",
-  display: "swap",
-  weight: ["400", "500", "700"],
 });
 
 export const metadata: Metadata = {
