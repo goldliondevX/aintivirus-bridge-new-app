@@ -103,7 +103,7 @@ export default function Home() {
                 {account.isConnected && (
                   <Button
                     className="w-full"
-                    color="primary"
+                    color="default"
                     onPress={() => disconnect()}
                   >
                     Disconnect MetaMask
@@ -121,7 +121,7 @@ export default function Home() {
                 )}
                 {publicKey && (
                   <Button
-                    color="primary"
+                    color="default"
                     key={"sol-disconnect"}
                     onPress={handleDisconnect}
                     className="w-full"

@@ -1,4 +1,5 @@
 "use client";
+import { useMemo } from "react";
 import bs58 from "bs58";
 import { fromBytes, pad, parseUnits } from "viem";
 
@@ -51,47 +52,50 @@ function SendButton(props: SendButtonProps) {
         tokenBalance: solMax,
     } = useSolana();
 
-    const isMetaMaskConnected = !!ethereumAddress;
-    const isPhantomConnected = !!solanaAddress;
 
-    let disabled = true;
-    let label = "Loading...";
+    const { label, disabled } = useMemo(() => {
+        const isMetaMaskConnected = !!ethereumAddress;
+        const isPhantomConnected = !!solanaAddress;
 
-    if (!fromEid && !toEid) {
-        label = "Select chains";
-    } else if (!isMetaMaskConnected && !isPhantomConnected) {
-        label = "Connect wallets";
-    } else if (!isMetaMaskConnected) {
-        label = "Connect MetaMask";
-    } else if (!isPhantomConnected) {
-        label = "Connect Phantom";
-    } else if (amountIn == 0n) {
-        label = "Enter an amount";
-    } else if (
-        fromEid == EndpointId.ETHEREUM_V2_MAINNET.toString() &&
-        amountIn > ethMax
-    ) {
-        label = "Not enough tokens";
-    } else if (
-        fromEid == EndpointId.SOLANA_V2_MAINNET.toString() &&
-        amountIn > solMax
-    ) {
-        label = "Not enough tokens";
-    } else {
-        disabled = false;
-        label = "Send";
-    }
+        let _disabled = true;
+        let _label = "Loading...";
+
+        if (!fromEid && !toEid) {
+            _label = "Select chains";
+        } else if (!isMetaMaskConnected && !isPhantomConnected) {
+            _label = "Connect wallets";
+        } else if (!isMetaMaskConnected) {
+            _label = "Connect MetaMask";
+        } else if (!isPhantomConnected) {
+            _label = "Connect Phantom";
+        } else if (amountIn == 0n) {
+            _label = "Enter an amount";
+        } else if (
+            fromEid == EndpointId.ETHEREUM_V2_MAINNET.toString() &&
+            amountIn > ethMax
+        ) {
+            _label = "Not enough tokens";
+        } else if (
+            fromEid == EndpointId.SOLANA_V2_MAINNET.toString() &&
+            amountIn > solMax
+        ) {
+            _label = "Not enough tokens";
+        } else {
+            _disabled = false;
+            _label = "Send";
+        }
+        return { label: _label, disabled: _disabled }
+    }, [solanaAddress, ethereumAddress, ethMax, solMax, amountIn, fromEid, toEid]);
+
 
     const submit = async () => {
         if (fromEid == solana.eid.toString() && toEid == ethereum.eid.toString()) {
-            console.log("SOL to ETH")
             const to = ethereumAddress!;
             sendToEthereum(to, amountIn);
         } else if (
             fromEid == ethereum.eid.toString() &&
             toEid == solana.eid.toString()
         ) {
-            console.log("ETH to SOL")
             const to = fromBytes(pad(bs58.decode(solanaAddress!)), "hex");
             sendToSolana(to, amountIn);
         } else {
@@ -113,7 +117,7 @@ function SendButton(props: SendButtonProps) {
                     </Button>
                 ) : (
                     <Button
-                        disabled={disabled}
+                        isDisabled={disabled}
                         onPress={submit}
                         type="submit"
                         color="primary"

@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import bs58 from "bs58";
 import {
     fetchAddressLookupTable,
@@ -90,7 +90,7 @@ export const useSolana = (): Props => {
     const [hash, setHash] = useState("");
     const [tokenBalance, setTokenBalance] = useState("0");
 
-    const walletAddress = publicKey == null ? undefined : publicKey.toBase58();
+    const walletAddress = useMemo(() => publicKey == null ? undefined : publicKey.toBase58(), [publicKey]);
     const delay = 60 * 1000; // 1min
 
     useEffect(() => {
@@ -114,19 +114,19 @@ export const useSolana = (): Props => {
         return () => clearInterval(intervalId);
     }, [getTokenBalance, delay, walletAddress]);
 
-    const sendToEthereum = useCallback(async (to: string, amount: bigint) => {
+    const sendToEthereum = async (to: string, amount: bigint) => {
         try {
             setSolanaPending("true");
             const txHash = await send(phantomProvider!, { amount, to });
             setSolanaSuccess("true");
             setHash(txHash);
-        } catch(error) {
+        } catch (error) {
             console.error(error)
             setSolanaSuccess("false");
             setHash("");
         }
         setSolanaPending("false");
-    }, []);
+    };
 
     return {
         sendToEthereum,
@@ -147,22 +147,20 @@ const send = async (
 
     const { umi, umiWalletSigner } = await deriveConnection(fromEid, signer);
 
-    
+
     const { tokenProgramStr, oftProgramIdStr, escrowStr, mintStr } = solanaOFT;
-    
+
     const oftProgramId = publicKey(oftProgramIdStr);
     const mint = publicKey(mintStr);
     const umiEscrowPublicKey = publicKey(escrowStr);
     const tokenProgramId = publicKey(tokenProgramStr);
-    
-    console.log(umiWalletSigner.publicKey)
 
     const tokenAccount = findAssociatedTokenPda(umi, {
         mint,
         owner: umiWalletSigner.publicKey!,
         tokenProgramId,
     });
-    
+
     if (!tokenAccount) {
         throw new Error(
             `No token account found for mint ${mintStr} and owner ${umiWalletSigner.publicKey} in program ${tokenProgramId}`
@@ -185,16 +183,15 @@ const send = async (
             amountLd: amount,
             minAmountLd: 1n,
             options: Options.newOptions()
-            .addExecutorLzReceiveOption(100000, 0)
-            .toBytes(),
+                .addExecutorLzReceiveOption(100000, 0)
+                .toBytes(),
             composeMsg: undefined,
         },
         {
             oft: oftProgramId,
         }
     );
-    
-    console.log("Okay here!")
+
     const ix = await oft.send(
         umi.rpc,
         {
