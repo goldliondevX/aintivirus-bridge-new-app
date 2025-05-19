@@ -18,7 +18,7 @@ interface ProvidersProps {
 export function Providers({ children }: ProvidersProps) {
   return (
     <HeroUIProvider>
-      <NextThemesProvider attribute="class" defaultTheme="light">
+      <NextThemesProvider attribute="class" defaultTheme="dark">
         <WagmiProvider config={wagmiConfig}>
           <QueryClientProvider client={queryClient}>
             {children}
